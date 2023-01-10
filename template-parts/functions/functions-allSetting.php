@@ -55,10 +55,11 @@ add_filter('style_loader_src', 'remove_cssjs_ver2', 9999);
 add_filter('script_loader_src', 'remove_cssjs_ver2', 9999);
 
 /* ブロックエディタ（Gutenberg）用CSSの出力を排除する */
-function remove_editor_style()
+function remove_unuse_css()
 {
   wp_dequeue_style('wp-block-library');
 }
+add_action('wp_enqueue_scripts', 'remove_unuse_css', 9999);
 
 /* headタグ 最適化 */
 function ogp_prefix()
