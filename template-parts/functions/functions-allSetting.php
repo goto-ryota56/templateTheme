@@ -1,6 +1,4 @@
 <?php
-
-
 /* headタグ内 不要タグ削除 */
 function my_setup()
 {
@@ -67,7 +65,7 @@ function ogp_prefix()
 {
   if (!is_admin()) {
     $ogp_ns = 'og: https://ogp.me/ns#';
-    $fb_ns  = 'fb: https://ogp.me/ns/fb#';
+    $fb_ns = 'fb: https://ogp.me/ns/fb#';
 
     if (!is_singular()) {
       $type_ns = 'website: https://ogp.me/ns/website#';
