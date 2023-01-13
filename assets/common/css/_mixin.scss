@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+// media query
 $breakpoint: (
   "sm": "screen and (max-width: 600px)",
   "md": "screen and (max-width: 768px)",
@@ -10,5 +11,10 @@ $breakpoint: (
   @media #{map-get($breakpoint, $select)} {
     @content;
   }
+}
+
+// px → rem
+@function rem($fontSize) {
+  @return ($fontSize / 16) * 1rem;
 }
 
