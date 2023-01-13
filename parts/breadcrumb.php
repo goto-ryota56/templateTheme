@@ -1,12 +1,13 @@
 <?php
+
 /**
  * Breadcrumb
  */
 
 ?>
 
-<nav class="l-breadcrumb">
-<div class="l-inner">
-	<?php my_breadcrumb(); ?>
-</div><!-- /.l-inner -->
+<nav class="breadcrumb_area">
+  <div class="inner">
+    <?php my_breadcrumb(); ?>
+  </div><!-- /.l-inner -->
 </nav><!-- /.l-breadcrumb -->
