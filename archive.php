@@ -1,53 +1,39 @@
 <?php
+
 /**
  * Archive
  */
 
 get_header();
-get_template_part( 'parts/template/mainvisual/archive' );
-get_template_part( 'parts/breadcrumb' );
+get_template_part('parts/template/mainvisual/archive');
+get_template_part('parts/breadcrumb');
 ?>
 
 
-<div class="p-content p-content--column-one">
-<div class="l-inner">
-<div class="p-content__row">
+<main class="content_area">
+  <div class="inner">
+    <div class="contents_box">
+      <?php
+      if (have_posts()) :
+      ?>
+        <div class="contents_list">
+          <?php
+          while (have_posts()) :
+            the_post();
 
-	<main class="l-primary" role="main">
-	<div class="p-content__archive">
+            get_template_part('template/content/archive');
 
-		<?php
-		if ( have_posts() ) :
-			?>
-		<div class="p-archive-head">
-			<h2 class="p-archive-head__title"><?php the_archive_title(); ?></h2><!-- /.p-archive-head__title -->
-			<div class="p-archive-head__description"><?php the_archive_description(); ?></div><!-- /.p-archive-head__description -->
-		</div><!-- /.p-archive-head -->
+          endwhile;
+          ?>
+        </div><!-- /.p-entries -->
 
-		<div class="p-entries p-entries--horizon04">
-			<?php
-			while ( have_posts() ) :
-				the_post();
-
-				get_template_part( 'template/content/archive' );
-
-		endwhile;
-			?>
-		</div><!-- /.p-entries -->
-
-			<?php get_template_part( 'parts/pagenation', 'archive' ); ?>
-			<?php
-		endif;
-		?>
-
-</div><!-- /.p-content__archive -->
-</main><!-- /.l-primary -->
-
-<?php get_sidebar(); ?>
-
-</div><!-- /.p-content__row -->
-</div><!-- /.l-inner -->
-</div><!-- /.p-content -->
+        <?php get_template_part('parts/pagenation', 'archive'); ?>
+      <?php
+      endif;
+      ?>
+    </div>
+  </div>
+</main>
 
 
 

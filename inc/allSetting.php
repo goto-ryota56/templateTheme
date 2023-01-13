@@ -3,23 +3,17 @@
 function my_setup()
 {
   add_theme_support('post-thumbnails'); /* アイキャッチ */
-  add_theme_support('automatic-feed-links'); /* RSSフィード */
   add_theme_support('title-tag'); /* タイトルタグ自動生成 */
-  add_theme_support('html5', array( /* HTML5のタグで出力 */
-    'search-form',
-    'comment-form',
-    'comment-list',
-    'gallery',
-    'caption',
-  ));
-
-  // RSSフィード削除
-  remove_action('do_feed_rdf', 'do_feed_rdf');
-  remove_action('do_feed_rss', 'do_feed_rss');
-  remove_action('do_feed_rss2', 'do_feed_rss2');
-  remove_action('do_feed_atom', 'do_feed_atom');
-  remove_action('wp_head', 'feed_links', 2);
-  remove_action('wp_head', 'feed_links_extra', 3);
+  add_theme_support(
+    'html5',
+    array( /* HTML5のタグで出力 */
+      'search-form',
+      'comment-form',
+      'comment-list',
+      'gallery',
+      'caption',
+    )
+  );
 
   /* テキストエディタの絵文字に対応する為の各種出力を排除する */
   remove_action('wp_head', 'print_emoji_detection_script', 7);

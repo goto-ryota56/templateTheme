@@ -7,12 +7,6 @@ function my_script_init()
   // jquery.jsを読み込む
   wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js');
   // 共通JS読み込み
-  wp_enqueue_script('all', '/common/js/script.js');
-
-
-  // カスタム投稿タイプ
-  if (is_front_page()) {
-    wp_enqueue_script('index', '/index/js/script.js');
-  }
+  wp_enqueue_script('all', get_template_directory_uri() . '/assets/common/js/script.js');
 }
 add_action('wp_footer', 'my_script_init');
