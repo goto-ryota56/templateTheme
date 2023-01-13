@@ -1,6 +1,6 @@
 <?php
 /**
- * Index
+ * Archive
  */
 
 get_header();
@@ -9,12 +9,11 @@ get_template_part( 'parts/breadcrumb' );
 ?>
 
 
-
 <div class="p-content p-content--column-one">
 <div class="l-inner">
 <div class="p-content__row">
 
-	<main class="l-primary">
+	<main class="l-primary" role="main">
 	<div class="p-content__archive">
 
 		<?php
@@ -23,9 +22,9 @@ get_template_part( 'parts/breadcrumb' );
 		<div class="p-archive-head">
 			<h2 class="p-archive-head__title"><?php the_archive_title(); ?></h2><!-- /.p-archive-head__title -->
 			<div class="p-archive-head__description"><?php the_archive_description(); ?></div><!-- /.p-archive-head__description -->
-		</div><!-- /p-archive-head -->
+		</div><!-- /.p-archive-head -->
 
-		<div class="p-entries">
+		<div class="p-entries p-entries--horizon04">
 			<?php
 			while ( have_posts() ) :
 				the_post();
@@ -34,7 +33,7 @@ get_template_part( 'parts/breadcrumb' );
 
 		endwhile;
 			?>
-		</div><!-- /p-entries -->
+		</div><!-- /.p-entries -->
 
 			<?php get_template_part( 'parts/pagenation', 'archive' ); ?>
 			<?php

@@ -1,29 +1,32 @@
 <?php
 /**
- * 404
+ * Single
  */
 
 get_header();
-get_template_part( 'parts/template/mainvisual/page' );
+get_template_part( 'parts/template/mainvisual/single' );
 get_template_part( 'parts/breadcrumb' );
 ?>
-
 
 <div class="p-content">
 <div class="l-inner">
 <div class="p-content__row">
 
-
 <main class="l-primary">
-<div class="p-content__page">
+<div class="p-content__single">
 
-<article <?php post_class( array( 'p-entry', 'p-entry--page' ) ); ?>>
+<?php
+if ( have_posts() ) :
+	while ( have_posts() ) :
+		the_post();
 
-	<p>コンテンツが存在しません。</p>
+		get_template_part( 'template/content/single' );
+		get_template_part( 'parts/pagenation', 'page' );
+endwhile;
+endif;
+?>
 
-</article><!-- /.p-entry -->
-
-</div><!-- /.p-content__page -->
+</div><!-- /.p-content__single -->
 </main><!-- /.l-primary -->
 
 
