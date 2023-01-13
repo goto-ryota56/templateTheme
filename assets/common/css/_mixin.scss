@@ -13,8 +13,3 @@ $breakpoint: (
   }
 }
 
-// px → rem
-@function rem($fz) {
-  @return ($fz / 16) * 1rem;
-}
-
