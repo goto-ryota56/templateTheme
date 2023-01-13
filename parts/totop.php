@@ -1,3 +1,3 @@
 <div class="toTop">
-  <a href="#">TOPへ</a>
+  <a href="#top">TOPへ</a>
 </div>
