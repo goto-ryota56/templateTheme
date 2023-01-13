@@ -1,13 +1,13 @@
 @charset "utf-8";
 
 $breakpoint: (
-  sp: "screen and (max-width: 600px)",
-  tab: "screen and (max-width: 768px)",
-  pc: "screen and (max-width: 1025px)",
-);
+  "sm": "screen and (max-width: 600px)",
+  "md": "screen and (max-width: 768px)",
+  "lg": "screen and (max-width: 1024px)",
+) !default;
 
-@mixin mq($bp) {
-  @media #{map-get($breakpoint, $bp)} {
+@mixin mq($select: md) {
+  @media #{map-get($breakpoint, $select)} {
     @content;
   }
 }

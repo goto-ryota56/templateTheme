@@ -2,7 +2,42 @@
 @use "./mixin" as *;
 @use "./variable" as *;
 
-body {
-  font-size: var(--h1_fz) !important;
+html {
+  font-size: 62.5%;
+  font-size: 1.6rem;
+  font-family: sans-serif;
+  color: var(--d_color);
+  background-color: var(--l_color);
+}
+
+#wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  height: 60px;
+  background: var(--m_color);
+  color: var(--l_color);
+}
+
+main {
+  overflow-x: hidden;
+  flex: 1;
+}
+
+footer {
+  width: 100%;
+  height: 300px;
+  background: var(--s-color1);
+  margin-top: auto;
+}
+.inner {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 

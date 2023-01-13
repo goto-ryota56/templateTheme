@@ -1,144 +1,209 @@
 <?php
 
-/**
- * My template Breadcrumb Functions
- */
+// パンくずリスト
+// 1.初期設定
+function get_breadcrumb_items($args)
+{
+  global $wp_query;
+  global $post;
 
-if (!function_exists('my_breadcrumb')) {
+  $items = array();
 
-  /**
-   * Display Breadcrumbs List
-   *
-   * @param string $object_type Taxonomy Name.
-   * @return void
-   */
-  function my_breadcrumb($object_type = '')
-  {
-    $breadcrumb_html       = '';
-    $breadcrumb_beore      = '<div class="p-breadcrumb"><ul>';
-    $breadcrumb_after      = '</ul></div>';
-    $breadcrumb_home       = apply_filters('my_breadcrumb_home', 'Home');
-    $breadcrumb_home_tag   = '<li><a href="' . esc_url(home_url('/')) . '">' . $breadcrumb_home . '</a></li>';
-    $breadcrumb_bridge     = apply_filters('my_breadcrumb_bridge', '&gt;');
-    $breadcrumb_bridge_tag = '<li><span class="p-breadcrumb__bridge">' . $breadcrumb_bridge . '</span></li>';
+  if (is_front_page()) {
+    if ($args['home']) {
+      $items[] = array('title' => $args['home_template'], 'link' => false);
+    }
+    return $items;
+  }
 
-    if (is_front_page()) { /* Front Page */
-      echo '';
-    } elseif (is_home()) { /* Blog Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', get_the_title()) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_attachment()) { /* Media */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', get_the_title()) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_single()) { /* Single */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      if ('post' !== get_post_type()) {
-        $breadcrumb_html .= '<li><a href="' . esc_url(get_post_type_archive_link(get_post_type())) . '">' . esc_html(get_post_type_object(get_post_type())->labels->name) . '</a></li>' . $breadcrumb_bridge_tag;
-      } else {
-        $this_categories = my_get_post_categories(get_the_ID());
-        $thie_parents    = get_ancestors($this_categories[0]['id'], 'category');
-        if ($thie_parents) {
-          $thie_parents       = array_reverse($thie_parents);
-          $thie_parents_count = count($thie_parents);
-          for ($i = 0; $i < $thie_parents_count; $i++) {
-            $this_parent_category = get_category($thie_parents[$i]);
-            $breadcrumb_html     .= '<li><a href="' . get_category_link($this_parent_category->term_id) . '">' . $this_parent_category->cat_name . '</a></li>' . $breadcrumb_bridge_tag;
-          }
-        }
-        $breadcrumb_html .= '<li><a href="' . $this_categories[0]['link'] . '">' . $this_categories[0]['name'] . '</a></li>' . $breadcrumb_bridge_tag;
-      }
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', get_the_title()) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_page()) { /* Page */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $thie_parents     = get_ancestors(get_the_ID(), 'page');
-      if ($thie_parents) {
-        $thie_parents       = array_reverse($thie_parents);
-        $this_parents_count = count($thie_parents);
-        for ($i = 0; $i < $this_parents_count; $i++) {
-          $breadcrumb_html .= '<li><a href="' . get_permalink($thie_parents[$i]) . '">' . get_the_title($thie_parents[$i]) . '</a></li>' . $breadcrumb_bridge_tag;
-        }
-      }
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', get_the_title()) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_category()) { /* Category Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $thie_parents     = get_ancestors(get_query_var('cat'), 'category');
-      if ($thie_parents) {
-        $thie_parents       = array_reverse($thie_parents);
-        $this_parents_count = count($thie_parents);
-        for ($i = 0; $i < $this_parents_count; $i++) {
-          $this_parent_category = get_category($thie_parents[$i]);
-          $breadcrumb_html     .= '<li><a href="' . get_category_link($this_parent_category->term_id) . '">' . $this_parent_category->cat_name . '</a></li>' . $breadcrumb_bridge_tag;
-        }
-      }
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', single_cat_title('', false)) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_search()) { /* Search Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', '「' . get_query_var('s') . '」の検索結果') . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_tag()) { /* Tag Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', single_tag_title('', false)) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_post_type_archive()) { /* Other PostType Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', post_type_archive_title('', false)) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_tax()) { /* Term Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><a href="' . esc_url(get_post_type_archive_link(get_post_type())) . '">' . esc_html(get_post_type_object(get_post_type())->labels->name) . '</a></li>' . $breadcrumb_bridge_tag;
-      if ($object_type) {
-        $thie_parents = get_ancestors(get_queried_object_id(), $object_type);
-        if ($thie_parents) {
-          $thie_parents       = array_reverse($thie_parents);
-          $this_parents_count = count($thie_parents);
-          for ($i = 0; $i < $this_parents_count; $i++) {
-            $this_parent_term = get_term($thie_parents[$i], $object_type);
-            $breadcrumb_html .= '<li><a href="' . get_category_link($this_parent_term->term_id) . '">' . $this_parent_term->name . '</a></li>' . $breadcrumb_bridge_tag;
-          }
-        }
-      }
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', single_term_title('', false)) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_author()) { /* Author Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">' . apply_filters('my_breadcrumb_title', get_the_author()) . '</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_date()) { /* Date Archive */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $this_year        = get_query_var('year');
-      $this_month       = get_query_var('monthnum');
-      $this_day         = get_query_var('day');
-      if ($this_year) {
-        $breadcrumb_html .= '<li><a href="' . get_year_link($this_year) . '">' . $this_year . '年' . '</a></li>' . $breadcrumb_bridge_tag;
-      }
-      if ($this_month) {
-        $breadcrumb_html .= '<li><a href="' . get_month_link($this_year, $this_month) . '">' . $this_month . '月' . '</a></li>' . $breadcrumb_bridge_tag;
-      }
-      if ($this_day) {
-        $breadcrumb_html .= '<li><a href="' . get_day_link($this_year, $this_month, $this_day) . '">' . $this_day . '日' . '</a></li>' . $breadcrumb_bridge_tag;
-      }
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
-    } elseif (is_404()) { /* 404 */
-      $breadcrumb_html .= $breadcrumb_beore . $breadcrumb_home_tag . $breadcrumb_bridge_tag;
-      $breadcrumb_html .= '<li><span class="p-breadcrumb__current">404</span></li>';
-      $breadcrumb_html .= $breadcrumb_after;
-      echo wp_kses_post($breadcrumb_html);
+  if ($args['home']) {
+    $items[] = array('title' => $args['home_template'], 'link' => home_url('/'));
+  }
+
+  $post_type = get_post_type();
+
+  if ('post' === $post_type && !is_search()) {
+    if ($blog_id = get_option('page_for_posts')) {
+      $items[] = array('title' => get_the_title($blog_id), 'link' => get_page_link($blog_id));
+    }
+  } else {
+    if (is_post_type_archive()) {
+      $items[] = array('title' => post_type_archive_title(null, false), 'link' => false);
     }
   }
+
+  if (is_home()) {
+    /*
+		 * Blog homepage page.
+		 */
+    $items[] = array('title' => wp_title('', false), 'link' => false);
+  } elseif (is_single()) {
+    /*
+		 * Single Post page.
+		 */
+    $post_type = get_post_type($post->ID);
+    if ('post' === $post_type) {
+      /*
+			 * Post page.
+			 */
+      if ($cats = get_the_category($post->ID)) {
+        $current_cat = null;
+        foreach ($cats as $cat) {
+          if (!$current_cat || cat_is_ancestor_of($current_cat, $cat)) {
+            $current_cat = $cat;
+          }
+        }
+        if ($current_cat->parent) {
+          $ancestor_cat_ids = array_reverse(get_ancestors($current_cat->cat_ID, 'category'));
+          foreach ($ancestor_cat_ids as $cat_id) {
+            $items[] = array('title' => get_cat_name($cat_id), 'link' => get_category_link($cat_id));
+          }
+        }
+        $items[] = array('title' => get_cat_name($current_cat->cat_ID), 'link' => get_category_link($current_cat->cat_ID));
+      }
+    } else {
+      /*
+			 * Custom Post Type page.
+			 */
+      $post_type_object = get_post_type_object($post->post_type);
+      if (false !== $post_type_object->has_archive) {
+        $items[] = array('title' => $post_type_object->labels->name, 'link' => get_post_type_archive_link(get_post_type()));
+      }
+    }
+    $strtitle = the_title('', '', false);
+    if (!isset($strtitle) || $strtitle == '') {
+      $strtitle = $post->ID;
+    }
+    $items[] = array('title' => $strtitle, 'link' => false);
+  } elseif (is_category()) {
+    /*
+		 * Category archive page.
+		 */
+    $cat = get_queried_object();
+    if ($cat->parent) {
+      $ancestor_cat_ids = array_reverse(get_ancestors($cat->cat_ID, 'category'));
+      foreach ($ancestor_cat_ids as $cat_id) {
+        if (!in_array($cat_id, $args['exclude_categorys'])) {
+          $items[] = array('title' => get_cat_name($cat_id), 'link' => get_category_link($cat_id));
+        }
+      }
+    }
+    $items[] = array('title' => $cat->cat_name, 'link' => false);
+  } else if (is_tag()) {
+    /*
+		 * Tag archive page.
+		 */
+    $tag_id = get_query_var('tag_id');
+    $tag = get_tag($tag_id);
+    if ($tag) {
+      $items[] = array('title' => $tag->name, 'link' => false);
+    }
+  } elseif (is_tax()) {
+    /*
+		 * Taxonomy archive page.
+		 */
+    $query_obj = get_queried_object();
+    $post_types = get_taxonomy($query_obj->taxonomy)->object_type;
+    $cpt = $post_types[0];
+    $items[] = array('title' => get_post_type_object($cpt)->label, 'link' => get_post_type_archive_link($cpt));
+
+    $taxonomy = get_query_var('taxonomy');
+    $term = get_term_by('slug', get_query_var('term'), $taxonomy);
+    if (is_taxonomy_hierarchical($taxonomy) && $term->parent != 0) {
+      $ancestors = array_reverse(get_ancestors($term->term_id, $taxonomy));
+      foreach ($ancestors as $ancestor_id) {
+        $ancestor = get_term($ancestor_id, $taxonomy);
+        $items[] = array('title' => $ancestor->name, 'link' => get_term_link($ancestor, $term->slug));
+      }
+    }
+    $items[] = array('title' => $term->name, 'link' => false);
+  } elseif (is_year()) {
+    /*
+		 * Year archive page.
+		 */
+    $items[] = array('title' => get_the_time(_x('Y', 'breadcrumb year format', 'jp-for-twentytwentyone')), 'link' => false);
+  } elseif (is_month()) {
+    /*
+		 * Month archive page.
+		 */
+    $items[] = array('title' => get_the_time(_x('Y', 'breadcrumb year format', 'jp-for-twentytwentyone')), 'link' => get_year_link(get_the_time('Y')));
+    $items[] = array('title' => get_the_time(_x('F', 'breadcrumb month format', 'jp-for-twentytwentyone')), 'link' => false);
+  } elseif (is_date()) {
+    /*
+		 * Date archive page.
+		 */
+    $items[] = array('title' => get_the_time(_x('Y', 'breadcrumb year format', 'jp-for-twentytwentyone')), 'link' => get_year_link(get_the_time('Y')));
+    $items[] = array('title' => get_the_time(_x('F', 'breadcrumb month format', 'jp-for-twentytwentyone')), 'link' => get_month_link(get_the_time('Y'), get_the_time('m')));
+    $items[] = array('title' => get_the_time(_x('d', 'breadcrumb day format', 'jp-for-twentytwentyone')), 'link' => false);
+  } elseif (is_page()) {
+    /*
+		 * Single page.
+		 */
+    $post = $wp_query->get_queried_object();
+    if ($post->post_parent == 0) {
+      $items[] = array('title' => get_the_title('', '', true), 'link' => false);
+    } else {
+      $ancestors = array_reverse(get_post_ancestors($post->ID));
+      array_push($ancestors, $post->ID);
+      foreach ($ancestors as $ancestor) {
+        $strtitle = get_the_title($ancestor);
+        if (!isset($strtitle) || $strtitle == '') {
+          $strtitle = $post->ID;
+        }
+        if ($ancestor != end($ancestors)) {
+          $items[] = array('title' => strip_tags(apply_filters('single_post_title', $strtitle)), 'link' => get_permalink($ancestor));
+        } else {
+          $items[] = array('title' => strip_tags(apply_filters('single_post_title', $strtitle)), 'link' => false);
+        }
+      }
+    }
+  } elseif (is_search()) {
+    /*
+		 * Search page.
+		 */
+    $items[] = array('title' => __('Search Results', 'jp-for-twentytwentyone'), 'link' => false);
+  } elseif (is_404()) {
+    /*
+		 * 404 page.
+		 */
+    $items[] = array('title' => __('404', 'jp-for-twentytwentyone'), 'link' => false);
+  }
+
+  return $items;
+}
+// 2.オブジェクト作成
+function get_breadcrumb($args = array())
+{
+  $defaults = array(
+    'before' => '<nav id="breadcrumb" role="navigation" class="alignwide">',
+    'after' => '</nav>',
+    'home' => true,
+    'home_template' => 'HOME',
+    'exclude_categorys' => array()
+  );
+  $args = wp_parse_args($args, $defaults);
+
+  $items = get_breadcrumb_items($args);
+
+  $html = $args['before'];
+  $html .= '<ul itemscope itemtype="https://schema.org/BreadcrumbList" class="breadcrumbs">';
+  foreach ($items as $index => $item) {
+    $html .= '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+    if ($item['link']) {
+      $html .= '<a itemprop="item" href="' . $item['link'] . '"><span itemprop="name">' . $item['title'] . '</span></a>';
+    } else {
+      $html .= '<span itemprop="name">' . $item['title'] . '</span>';
+    }
+    $html .= '<meta itemprop="position" content="' . ($index + 1) . '" />';
+    $html .= '</li>';
+  }
+  $html .= '</ul>';
+  $html .= $args['after'] . "\n";
+
+  return $html;
+}
+// 3.表示設定
+function breadcrumbs($args)
+{
+  echo get_breadcrumb($args);
 }
