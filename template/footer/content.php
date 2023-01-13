@@ -1,9 +1,3 @@
-<?php
-
-/**
- * Footer Content
- */
-?>
 <footer class="footer_area">
   <div class="footer_menu">
     <div class="inner">

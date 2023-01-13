@@ -13,5 +13,5 @@
       )
     );
     ?>
-  </div><!-- /.p-pagenation -->
+  </div>
 <?php endif; ?>

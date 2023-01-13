@@ -1,11 +1,5 @@
-<?php
-/**
- * Main Visual Single
- */
-
-?>
-
-<div class="p-mv p-mv--single">
-<div class="l-inner">
-</div><!-- /.l-inner -->
-</div><!-- /.p-mv -->
+<div class="single_mv_area">
+  <div class="inner">
+    <p>個別投稿ページ用のメインビジュアル</p>
+  </div>
+</div>

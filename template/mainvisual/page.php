@@ -1,11 +1,5 @@
-<?php
-/**
- * Main Visual Page
- */
-
-?>
-
-<div class="p-mv p-mv--page">
-<div class="l-inner">
-</div><!-- /.l-inner -->
-</div><!-- /.p-mv -->
+<div class="page_mv_area">
+  <div class="inner">
+    <p>固定ページ用のメインビジュアル</p>
+  </div>
+</div>

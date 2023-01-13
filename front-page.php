@@ -5,8 +5,9 @@ get_template_part('parts/breadcrumb');
 ?>
 
 <main>
-
+  <div class="inner">
+    <p>TOP用コンテンツテンプレート</p>
+  </div>
 </main>
-
 
 <?php get_footer(); ?>

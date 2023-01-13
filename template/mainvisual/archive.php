@@ -1,11 +1,5 @@
-<?php
-/**
- * Main Visual Single
- */
-
-?>
-
-<div class="p-mv p-mv--archive">
-<div class="l-inner">
-</div><!-- /.l-inner -->
-</div><!-- /.p-mv -->
+<div class="archive_mv_area">
+  <div class="inner">
+    <p>記事一覧ページ用のメインビジュアル</p>
+  </div>
+</div>
