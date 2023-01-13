@@ -1,0 +1,8 @@
+@charset "utf-8";
+@use "./mixin" as *;
+@use "./variable" as *;
+
+body {
+  font-size: var(--h1_fz) !important;
+}
+

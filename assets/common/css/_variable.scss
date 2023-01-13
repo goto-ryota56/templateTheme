@@ -1,0 +1,24 @@
+@charset "utf-8";
+@use "./mixin" as *;
+// フォント読み込み
+
+// 変数指定
+:root {
+  // フォントサイズ
+  --h1_fz: 50px;
+  --h2_fz: 32px;
+  --h3_fz: 20px;
+  --txt_fz: 16px;
+  @include mq(pc) {
+    --h1_fz: 32px;
+    --h2_fz: 22px;
+    --h3_fz: 16px;
+    --txt_fz: 14px;
+  }
+
+  // カラー
+  --m_color: #363636;
+  --sub-color1: #666666;
+  --sub-color2: #cccccc;
+}
+

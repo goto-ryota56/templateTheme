@@ -1,0 +1,21 @@
+:root {
+  --h1_fz: 50px;
+  --h2_fz: 32px;
+  --h3_fz: 20px;
+  --txt_fz: 16px;
+  --m_color: #363636;
+  --sub-color1: #666666;
+  --sub-color2: #cccccc;
+}
+@media screen and (max-width: 1025px) {
+  :root {
+    --h1_fz: 32px;
+    --h2_fz: 22px;
+    --h3_fz: 16px;
+    --txt_fz: 14px;
+  }
+}
+
+body {
+  font-size: var(--h1_fz) !important;
+}/*# sourceMappingURL=common.css.map */
