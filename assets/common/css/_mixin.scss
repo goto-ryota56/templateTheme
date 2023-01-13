@@ -14,7 +14,7 @@ $breakpoint: (
 }
 
 // px → rem
-@function rem($fontSize) {
-  @return ($fontSize / 16) * 1rem;
+@function rem($fz) {
+  @return ($fz / 16) * 1rem;
 }
 
